@@ -1,0 +1,27 @@
+#currecyTable .valueCol {
+  text-align: right;
+}
+
+#currecyTable {
+  width: 100%;
+}
+
+#currecyTable th {
+  text-align: center;
+  width: 33%;
+}
+
+#currecyTable tbody>tr:hover {
+  color: red;
+  cursor: pointer;
+}
+
+#currecyTable .asc {
+  border-top: 2px gray solid;
+  cursor: pointer;
+}
+
+#currecyTable .desc {
+  border-bottom: 2px gray solid;
+  cursor: pointer;
+}
