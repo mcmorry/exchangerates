@@ -15,18 +15,34 @@ class App extends Component {
     this.state = {
       date: new Date(),
       currency: 'EUR',
+      exludedCurrency: null,
       rates: null
     };
 
-    this.setInput = this.setInput.bind(this);
+    this.submit = this.submit.bind(this);
+    this.setDate = this.setDate.bind(this);
     this.setCurrency = this.setCurrency.bind(this);
+    this.switchCurrency = this.switchCurrency.bind(this);
   }
 
-  setInput(data) {
-    this.loadData(data.date, data.currency);
+  setDate(date) {
+    this.setState({
+      date: date
+    });
   }
   
   setCurrency(currency) {
+    this.setState({
+      currency: currency
+    });
+  }
+  
+  submit() {
+    this.loadData(this.state.date, this.state.currency);
+  }
+
+  switchCurrency(currency) {
+    this.setCurrency(currency);
     this.loadData(this.state.date, currency);
   }
 
@@ -50,8 +66,7 @@ class App extends Component {
       this.setState({
         noData: false,
         rates: this.cache[cacheKey],
-        date: date,
-        currency: currency
+        exludedCurrency: currency,
       });
       return;
     }
@@ -65,7 +80,7 @@ class App extends Component {
           this.setState({
             rates: result.rates,
             date: date,
-            currency: currency
+            exludedCurrency: currency,
           });
         },
         (error) => {
@@ -81,9 +96,9 @@ class App extends Component {
     } else {
       output = (
         <CurrencyTable 
-          currencies={this.currencies.filter(cur => {return cur !== this.state.currency})} 
+          currencies={this.currencies.filter(cur => {return cur !== this.state.exludedCurrency})} 
           rates={this.state.rates}
-          onSelectCurrency={this.setCurrency}
+          onSelectCurrency={this.switchCurrency}
         />
       );
     }
@@ -92,7 +107,14 @@ class App extends Component {
       <div className="App">
         <h1>Exchange Rates</h1>
         <div className="col1">
-          <CurrencyForm currencies={this.currencies} currency={this.state.currency} date={this.state.date} onSubmit={this.setInput}/>
+          <CurrencyForm 
+            currencies={this.currencies} 
+            currency={this.state.currency} 
+            date={this.state.date} 
+            onDateChange={this.setDate} 
+            onCurrencyChange={this.setCurrency} 
+            onSubmit={this.submit}
+          />
         </div>
         <div className="col2">
           {output}

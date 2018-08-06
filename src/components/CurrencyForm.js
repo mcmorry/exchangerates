@@ -8,31 +8,17 @@ class CurrencyForm extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      currency: this.props.currency,
-      date: this.props.date
-    }
-
     this.submit = this.submit.bind(this);
     this.setCurrency = this.setCurrency.bind(this);
-    this.setDate = this.setDate.bind(this);
+  }
+
+  setCurrency(e) {
+    if (this.props.onCurrencyChange) this.props.onCurrencyChange(e.target.value);
   }
 
   submit(e) {
     e.preventDefault();
-    if (this.state.currency && this.state.date && this.props.onSubmit) this.props.onSubmit(this.state);
-  }
-
-  setCurrency(e) {
-    this.setState({
-      currency: e.target.value
-    });
-  }
-
-  setDate(date) {
-    this.setState({
-      date: date
-    });
+    if (this.props.onSubmit) this.props.onSubmit();
   }
 
   render() {
@@ -49,7 +35,7 @@ class CurrencyForm extends Component {
               <td><select onChange={this.setCurrency} value={this.props.currency}>{options}</select></td>
             </tr><tr>
               <td>Date:</td>
-              <td><DatePicker date={this.state.date} onChange={this.setDate} maxDate={new Date()} minDate={new Date(1999, 0, 4)}/></td>
+              <td><DatePicker date={this.props.date} onChange={this.props.onDateChange} maxDate={new Date()} minDate={new Date(1999, 0, 4)}/></td>
             </tr><tr>
               <td></td>
               <td><input type="submit" value="Display"/></td>
